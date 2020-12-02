@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-plt.rcParams['figure.figsize'] = (8, 15)
+plt.rcParams['figure.figsize'] = (15, 8)
 
 
 def get_mean(items, size):
@@ -20,11 +20,11 @@ def read_data(name_file='data.txt'):
     return data
 
 
-def model_data(x, start_degradation, end_degradation):
+def model_data(y, start_degradation, end_degradation):
     size_degradation = end_degradation - start_degradation
 
-    data_before_deg = list(x[:start_degradation])
-    data_after_deg = list(x[end_degradation:])
+    data_before_deg = list(y[:start_degradation])
+    data_after_deg = list(y[end_degradation:])
     data_after_deg_rev = data_after_deg[::-1]
 
     k = np.linspace(0, 1, num=size_degradation)
@@ -37,9 +37,9 @@ def model_data(x, start_degradation, end_degradation):
         data_before_deg.append(wma_a)
         data_after_deg_rev.append(wma_b)
 
-    new_x = list(x[:start_degradation]) + new_x + data_after_deg
+    new_y = list(y[:start_degradation]) + new_x + data_after_deg
 
-    return new_x
+    return new_y
 
 
 def plot_and_save(lines, name_lines):
@@ -57,15 +57,15 @@ def plot_and_save(lines, name_lines):
 
 def main():
     data = read_data()
-    x, y = zip(*data)
+    y, x = zip(*data)
 
     start_degradation = 828
     end_degradation = 890
 
-    new_x = model_data(x, start_degradation, end_degradation)
+    new_y = model_data(y, start_degradation, end_degradation)
     lines = [
         [x, y],
-        [new_x, y]
+        [x, new_y]
     ]
     name_lines = [
         'default',
